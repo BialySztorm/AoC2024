@@ -1,6 +1,7 @@
 import importlib
 import os
 
+
 def import_days():
     days = []
     for file in os.listdir('days'):

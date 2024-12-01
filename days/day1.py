@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from utils import data_manager as dm
 
+
 def handle_day(layout, sample=False):
     data = dm.read_data(1, sample)
     answer = ""

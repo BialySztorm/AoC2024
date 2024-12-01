@@ -1,4 +1,5 @@
 from kivy.app import App
+from kivy.uix.label import Label
 from kivy.graphics import Rectangle
 from kivy.graphics.context_instructions import Color
 from kivy.uix.floatlayout import FloatLayout
@@ -9,6 +10,7 @@ from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.widget import Widget
 from kivy.core.window import Window
 from utils.importer import import_days
+
 
 class CalendarDay(Button):
     def __init__(self, day, **kwargs):
@@ -22,7 +24,7 @@ class CalendarDay(Button):
         self.hovered = False
 
     def on_mouse_pos(self, *args):
-        if(self.disabled):
+        if (self.disabled):
             return
         pos = args[1]
         if self.collide_point(*self.to_widget(*pos)):
@@ -41,11 +43,11 @@ class CalendarDay(Button):
         Window.set_system_cursor('arrow')
 
 
-
 class MyApp(App):
     def build(self):
         Window.maximize()
         self.days = import_days()
+        self.sample = False
         self.layout = FloatLayout()
         with self.layout.canvas.before:
             Color(0.2, 0.6, 0.8, 1)  # Ustaw kolor tła (R, G, B, A)
@@ -81,19 +83,28 @@ class MyApp(App):
 
         self.layout.add_widget(self.calendar_layout)
 
+        sample_btn = Button(text='Sample?', size_hint=(None, None), size=(200, 50), pos_hint={'x': 0, 'top': 1},
+                            pos=(50, -50))
+        sample_btn.bind(on_press=self.switch_sample)
+        self.layout.add_widget(sample_btn)
+        self.sample_text = Label(text=str(self.sample), size_hint=(None, None), size=(200, 50), pos_hint={'top': 1},
+                                 pos=(200, -50))
+        self.layout.add_widget(self.sample_text)
+
     def show_day(self, day, *args):
         self.layout.clear_widgets()
 
-        return_btn = Button(text='Return to calendar', size_hint=(None, None), size=(200, 50), pos_hint={'x': 0, 'top': 1}, pos=(50, -50))
+        return_btn = Button(text='Return to calendar', size_hint=(None, None), size=(200, 50),
+                            pos_hint={'x': 0, 'top': 1}, pos=(50, -50))
         return_btn.bind(on_press=self.show_main)
-        print("Day", day+1)
-        self.days[day].handle_day(self.layout)
+        print("Day", day + 1)
+        self.days[day].handle_day(self.layout, self.sample)
         self.layout.add_widget(return_btn)
 
-
-
+    def switch_sample(self, *args):
+        self.sample = not self.sample
+        self.sample_text.text = str(self.sample)
 
 
 if __name__ == '__main__':
     MyApp().run()
-
