@@ -11,10 +11,10 @@ def handle_day(layout, sample=False):
 
     left = []
     right = []
-    for item in data:
-        l, r = item.split()
-        left.append(l)
-        right.append(r)
+    for i in range(len(data)):
+        left.append(data[i][0])
+        right.append(data[i][1])
+
     left.sort()
     right.sort()
 

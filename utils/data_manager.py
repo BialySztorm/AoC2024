@@ -1,9 +1,13 @@
-def read_data(day, sample=False):
+def read_data(day, sample=False, split=True):
     if (sample):
         with open(f"data/input/sample_day{day}.txt") as f:
-            return f.read().strip().split("\n")
-    with open(f"data/input/day{day}.txt") as f:
-        return f.read().strip().split("\n")
+            data = f.read().strip().split("\n")
+    else:
+        with open(f"data/input/day{day}.txt") as f:
+            data = f.read().strip().split("\n")
+    if (split):
+        return [item.split() for item in data]
+    return data
 
 
 def write_data(day, data, sample=False):
