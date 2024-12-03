@@ -1,0 +1,5 @@
+matplotlib~=3.9.3
+Kivy~=2.3.0
+setuptools~=75.6.0
+kivy-garden~=0.1.5
+kivy-garden.matplotlib~=0.1.1.dev0

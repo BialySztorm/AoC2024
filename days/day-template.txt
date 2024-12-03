@@ -1,0 +1,22 @@
+from kivy.uix.label import Label
+
+from utils import data_manager as dm
+from enum import Enum
+
+
+
+def handle_day(layout, sample=False):
+    data = dm.read_data(3, sample)
+    answer = ""
+
+    # * Part one and two
+
+
+    dm.write_data(3, answer, sample)
+
+    # * Visualization
+    layout.add_widget(Label(text=answer, font_size=30, size_hint=(0.1, 0.1), pos_hint={"x": 0.45, "y": 0.45}))
+
+
+
+

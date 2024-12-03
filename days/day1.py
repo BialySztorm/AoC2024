@@ -1,7 +1,6 @@
 from kivy.clock import Clock
 from kivy_garden.matplotlib import FigureCanvasKivyAgg
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
 from utils import data_manager as dm
 
 
