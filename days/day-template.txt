@@ -6,7 +6,7 @@ from enum import Enum
 
 
 def handle_day(layout, sample=False):
-    data = dm.read_data(3, sample)
+    data = dm.read_data(3, sample, False)
     answer = ""
 
     # * Part one and two
