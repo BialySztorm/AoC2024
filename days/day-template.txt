@@ -1,7 +1,6 @@
 from kivy.uix.label import Label
 
 from utils import data_manager as dm
-from enum import Enum
 
 
 

@@ -18,3 +18,17 @@ def write_data(day, data, sample=False):
         return
     with open(f"data/output/day{day}.txt", "w") as f:
         f.write(data)
+
+def split_array_at_empty(data):
+    result = []
+    current = []
+    for item in data:
+        if item == '':
+            if current:
+                result.append(current)
+                current = []
+        else:
+            current.append(item)
+    if current:
+        result.append(current)
+    return result
