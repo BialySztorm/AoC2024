@@ -1,0 +1,2 @@
+Part one: 41
+Part two: 6
