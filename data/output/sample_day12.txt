@@ -1,0 +1,2 @@
+Part one: 140
+Part two: 80
