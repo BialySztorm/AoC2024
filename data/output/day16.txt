@@ -1,1 +1,2 @@
 Part one: 147628
+Part two: 670

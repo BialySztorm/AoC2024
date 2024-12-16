@@ -25,14 +25,16 @@ def find_cheapest_path(data, start, end):
 
     return float('inf')
 
+
 def find_all_cheapest_paths(data, start, end, min_cost):
     rows, cols = len(data), len(data[0])
     pq = [(0, start[0], start[1], 1, 0, [(start[0], start[1])])]  # (cost, x, y, dx, dy, path)
     paths = []
+    min_cost_dict = {(start[0], start[1], 1, 0): 0}
 
     while pq:
         cost, x, y, dx, dy, path = heapq.heappop(pq)
-        
+
         if (x, y) == end and cost == min_cost:
             paths.append(path)
             continue
@@ -45,10 +47,16 @@ def find_all_cheapest_paths(data, start, end, min_cost):
 
             if 0 <= new_y < rows and 0 <= new_x < cols and data[new_y][new_x] != '#' and (new_x, new_y) not in path:
                 new_cost = cost + 1 + (1000 if (new_dx, new_dy) != (dx, dy) else 0)
-                if new_cost <= min_cost:
+                if new_cost <= min_cost and new_cost <= min_cost_dict.get((new_x, new_y, new_dx, new_dy), float('inf')):
+                    min_cost_dict[(new_x, new_y, new_dx, new_dy)] = new_cost
                     heapq.heappush(pq, (new_cost, new_x, new_y, new_dx, new_dy, path + [(new_x, new_y)]))
 
-    return paths
+    for path in paths:
+        for x, y in path:
+            data[y][x] = "O"
+
+    for row in data:
+        print("\t".join(row))
 
 
 
@@ -68,13 +76,7 @@ def handle_day(layout, sample=False):
     answer += f"Part one: {cheapest_path}\n"
 
     # * Part two
-    paths = find_all_cheapest_paths(data, start, end, cheapest_path)
-    for path in paths:
-        for x, y in path:
-            data[y][x] = "O"
-
-    for row in data:
-        print("\t".join(row))
+    find_all_cheapest_paths(data, start, end, cheapest_path)
 
     sum = 0
     for row in data:
