@@ -1,5 +1,4 @@
 from kivy.uix.label import Label
-from numpy.f2py.auxfuncs import throw_error
 
 from utils import data_manager as dm
 
