@@ -10,6 +10,7 @@ from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.widget import Widget
 from kivy.core.window import Window
 from utils.importer import import_days
+import time
 
 
 class CalendarDay(Button):
@@ -98,7 +99,9 @@ class MyApp(App):
                             pos_hint={'x': 0, 'top': 1}, pos=(50, -50))
         return_btn.bind(on_press=self.show_main)
         print("Day", day + 1)
+        start_time = time.time()
         self.days[day].handle_day(self.layout, self.sample)
+        print("Execution time:", time.time() - start_time)
         self.layout.add_widget(return_btn)
 
     def switch_sample(self, *args):
