@@ -3,6 +3,7 @@ from numpy.f2py.auxfuncs import throw_error
 
 from utils import data_manager as dm
 
+
 class ThreeBitComputer:
     def __init__(self, register_a, register_b, register_c, program):
         self.register_a = register_a
@@ -19,8 +20,6 @@ class ThreeBitComputer:
             instruction_list = [self._adv, self._bxl, self._bst, self._jnz, self._bxc, self._out, self._bdv, self._cdv]
             instruction_list[instruction_index]()
             self.pointer += 2
-            if test and self.test_failed:
-                return self.output
 
         return self.output
 
@@ -62,8 +61,6 @@ class ThreeBitComputer:
     # Outputs combo operand modulo 8
     def _out(self):
         output = self._get_combo_operand(self.program[self.pointer + 1]) % 8
-        if output not in self.program:
-            self.test_failed = True
         self.output.append(str(output))
 
     # Division register a with the power of the two to combo operand
@@ -78,15 +75,24 @@ class ThreeBitComputer:
         denominator = 2 ** self._get_combo_operand(self.program[self.pointer + 1])
         self.register_c = numerator // denominator
 
+
 def find_initial_register_a(register_b, register_c, program):
-    target_output = ",".join([str(cell) for cell in program])
-    initial_a = 1
+    register_a = sum(7 * 8 ** i for i in range(len(program) - 1)) + 1
+    target_output = [str(cell) for cell in program]
+
     while True:
-        computer = ThreeBitComputer(initial_a, register_b, register_c, program)
-        output = ",".join(computer.run_program(True))
+        computer = ThreeBitComputer(register_a, register_b, register_c, program)
+        output = computer.run_program()
+
         if output == target_output:
-            return initial_a
-        initial_a += 1
+            return register_a
+
+        for i in range(len(output) - 1, -1, -1):
+            if output[i] != str(program[i]):
+                add = 8 ** i
+                register_a += add
+                break
+
 
 def handle_day(layout, sample=False):
     data = dm.read_data(17, sample)
@@ -104,14 +110,10 @@ def handle_day(layout, sample=False):
     print(output)
 
     # * Part two
-    initial_a  = find_initial_register_a(register_b, register_c, program)
+    initial_a = find_initial_register_a(register_b, register_c, program)
     answer += f"Part two: {initial_a}\n"
 
     dm.write_data(17, answer, sample)
 
     # * Visualization
     layout.add_widget(Label(text=answer, font_size=30, size_hint=(0.1, 0.1), pos_hint={"x": 0.45, "y": 0.45}))
-
-
-
-
