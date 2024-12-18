@@ -1,4 +1,4 @@
-def read_data(day, sample=False, split=True):
+def read_data(day, sample=False, split=True, splitter=None):
     if (sample):
         with open(f"data/input/sample_day{day}.txt") as f:
             data = f.read().strip().split("\n")
@@ -6,7 +6,7 @@ def read_data(day, sample=False, split=True):
         with open(f"data/input/day{day}.txt") as f:
             data = f.read().strip().split("\n")
     if (split):
-        return [item.split() for item in data]
+        return [item.split(splitter) for item in data]
     return data
 
 
