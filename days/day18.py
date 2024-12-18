@@ -25,39 +25,32 @@ from collections import deque
 
 
 def find_path(map):
-    # Znajdź współrzędne startu (0, 0) i celu (end_loc)
     rows = len(map)
     cols = len(map[0])
     start_loc = (0, 0)
     end_loc = (rows - 1, cols - 1)
 
-    # Kierunki poruszania się: góra, dół, lewo, prawo
     directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
-    # Kolejka BFS i zbiór odwiedzonych węzłów
-    queue = deque([(start_loc, [start_loc])])  # (bieżąca pozycja, ścieżka)
-    visited = set([start_loc])
+    queue = deque([(start_loc, [start_loc])])
+    visited = {start_loc}
 
     while queue:
         (current, path) = queue.popleft()
 
-        # Jeśli dotarliśmy do celu, zwróć ścieżkę
         if current == end_loc:
             return path
 
-        # Przeglądaj sąsiadów
         for direction in directions:
             new_row = current[0] + direction[0]
             new_col = current[1] + direction[1]
             neighbor = (new_row, new_col)
 
-            # Sprawdź, czy sąsiad jest w granicach mapy i nie jest przeszkodą
             if (0 <= new_row < rows and 0 <= new_col < cols and
                     map[new_row][new_col] != '#' and neighbor not in visited):
                 visited.add(neighbor)
                 queue.append((neighbor, path + [neighbor]))
 
-    # Jeśli brak ścieżki, zwróć None
     return None
 
 
