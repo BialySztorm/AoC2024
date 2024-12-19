@@ -103,8 +103,8 @@ def handle_day(layout, sample=False):
 
     # * Part one
     computer = ThreeBitComputer(register_a, register_b, register_c, program)
-    output = computer.run_program()
-    answer += f"Part one: {",".join(output)}\n"
+    output = ",".join(computer.run_program())
+    answer += f"Part one: {output}\n"
     print([str(cell) for cell in program])
     print(output)
 
