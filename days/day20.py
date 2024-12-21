@@ -1,5 +1,5 @@
 from kivy.uix.label import Label
-from collections import deque
+from collections import deque, defaultdict
 
 from utils import data_manager as dm
 
@@ -17,6 +17,7 @@ def find_path(grid, start, end):
         if current == end:
             return path
 
+
         for direction in directions:
             new_row, new_col = current[0] + direction[0], current[1] + direction[1]
             neighbor = (new_row, new_col)
@@ -27,6 +28,19 @@ def find_path(grid, start, end):
 
     return None
 
+def use_cheats(path, cheats, limit):
+    results = defaultdict(int)
+    for i in range(len(path) - 2):
+        s = path[i]
+        for j in range(i + 2, len(path)):
+            e = path[j]
+            distance = abs(s[0] - e[0]) + abs(s[1] - e[1])
+            if distance <= cheats:
+                gain = j - i - distance
+                if gain >= limit:
+                    results[gain] += 1
+    return sum(results.values())
+
 def handle_day(layout, sample=False):
     data = [list(row) for row in dm.read_data(20, sample, False)]
     answer = ""
@@ -34,36 +48,27 @@ def handle_day(layout, sample=False):
     # * Part one and two
     start = (0, 0)
     end = (0, 0)
-    walls = []
     for i in range(len(data)):
         for j  in range(len(data[i])):
             if data[i][j] == "S":
                 start = (i,j)
             elif data[i][j] == "E":
                 end = (i,j)
-            elif data[i][j] == "#":
-                paths_around_count = 0
-                paths_around = [(0,1), (1,0), (0,-1), (-1,0)]
-                for path in paths_around:
-                    if 0 <= i + path[1] < len(data) and 0 <= j + path[0] < len(data[i]):
-                        if data[i + path[1]][j + path[0]] == "." or data[i + path[1]][j + path[0]] == "S" or data[i + path[1]][j + path[0]] == "E":
-                            paths_around_count += 1
-                if paths_around_count >=2:
-                    walls.append((i,j))
+            if start != (0,0) and end != (0,0):
+                break
+        if start != (0,0) and end != (0,0):
+            break
 
-    normal_path_size = len(find_path(data, start, end)) - 1
-    count = 0
-    if sample:
-        limit = 30
-    else:
-        limit = 100
-    for wall in walls:
-        data[wall[0]][wall[1]] = "."
-        tmp = len(find_path(data, start, end)) - 1
-        if normal_path_size - tmp >= limit:
-            count += 1
-        data[wall[0]][wall[1]] = "#"
-    answer += f"Part one: {count}\n"
+    path = find_path(data, start, end)
+    limit = 30 if sample else 100
+    result = use_cheats(path, 2, limit)
+    answer += f"Part one: {result}\n"
+
+    # * Part two
+    limit = 50 if sample else 100
+    result = use_cheats(path, 20, limit)
+
+    answer += f"Part two: {result}\n"
 
     dm.write_data(20, answer, sample)
 

@@ -1,1 +1,2 @@
 Part one: 4
+Part two: 285
